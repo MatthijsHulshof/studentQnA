@@ -4,7 +4,7 @@ function App() {
   const [names, setNames] = useState([]);
   const [newName, setNewName] = useState("");
 
-  const API_URL = "https://localhost:7276/api/names";
+  const API_URL = "http://localhost:5000/api/names";
 
   // Ophalen bij laden
   useEffect(() => {

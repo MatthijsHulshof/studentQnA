@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: studentqna-db-user
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: studentqna
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./users/StudentQnA.Users.API
+    container_name: studentqnauser-api
+    depends_on:
+      - postgres
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=studentqna;Username=user;Password=password
+    ports:
+      - "5000:8080"
+    restart: always
+
+  frontend:
+    build: ./frontend/studentqna
+    container_name: studentqna-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000/api/names
+    restart: always
+
+volumes:
+  pgdata:
