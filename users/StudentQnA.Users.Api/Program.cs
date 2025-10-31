@@ -7,11 +7,11 @@ using Microsoft.Extensions.Hosting;
 var builder = WebApplication.CreateBuilder(args);
 
 //Docker secrets
-var dbUser = File.ReadAllText("/run/secrets/postgres_user").Trim();
-var dbPassword = File.ReadAllText("/run/secrets/postgres_password").Trim();
+//var dbUser = File.ReadAllText("/run/secrets/postgres_user").Trim();
+//var dbPassword = File.ReadAllText("/run/secrets/postgres_password").Trim();
 
 //Connection string
-var connectionString = $"Host=postgres;Port=5432;Database=studentqna;Username={dbUser};Password={dbPassword}";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
 // Register DbContext
@@ -31,7 +31,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:3000") // React dev servers
+            policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "http://4.178.10.200") // React dev servers
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -46,13 +46,13 @@ var app = builder.Build();
 app.UseCors("AllowFrontend");
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

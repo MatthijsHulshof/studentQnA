@@ -4,7 +4,7 @@ function App() {
   const [names, setNames] = useState([]);
   const [newName, setNewName] = useState("");
 
-  const API_URL = "http://localhost:5000/api/names";
+const API_URL = `${process.env.REACT_APP_API_URL}/api/names`;
 
   // Ophalen bij laden
   useEffect(() => {
