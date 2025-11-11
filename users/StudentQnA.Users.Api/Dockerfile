@@ -4,13 +4,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
-# Copy csproj and restore dependencies
-COPY *.csproj ./
-RUN dotnet restore
+# Copy entire project so restore can find everything
+COPY . .
 
-# Copy the rest of the source and build the app
-COPY . ./
-RUN dotnet publish -c Release -o /app/out
+# Restore using the correct project file
+RUN dotnet restore "StudentQnA.Users.Api.csproj"
+
+# Build and publish
+RUN dotnet publish "StudentQnA.Users.Api.csproj" -c Release -o /app/out
 
 # ========================
 # 2. Runtime stage
