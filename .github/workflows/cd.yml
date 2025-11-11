@@ -2,9 +2,8 @@ name: CD - Deploy to AKS
 
 on:
   workflow_run:
-    Workflows: ["CI - Build & Test"]
-    types:
-      - completed
+    workflows: ["CI - Build & Test"]
+    types: [completed]
     branches:
       - main
   workflow_dispatch:
