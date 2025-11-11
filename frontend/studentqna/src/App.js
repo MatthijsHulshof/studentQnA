@@ -37,7 +37,7 @@ const API_URL = `${process.env.REACT_APP_API_URL}/api/names`;
   return (
     <div style={{ maxWidth: "600px", margin: "2rem auto", fontFamily: "sans-serif" }}>
       <h1>Student QnA - Namenlijst</h1>
-
+      <h2>Hello world!</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
