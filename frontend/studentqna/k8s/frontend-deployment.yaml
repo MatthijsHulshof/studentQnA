@@ -21,5 +21,9 @@ spec:
         env:
         - name: REACT_APP_API_URL
           value: "http://4.251.185.103"
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
       imagePullSecrets:
       - name: acr-auth

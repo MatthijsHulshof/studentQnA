@@ -26,5 +26,9 @@ spec:
                 secretKeyRef:
                   name: postgres-credentials
                   key: ConnectionStrings__DefaultConnection
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
       imagePullSecrets:
         - name: acr-secret
