@@ -1,0 +1,80 @@
+name: CD - Deploy to AKS
+
+on:
+  workflow_run:
+    Workflows: ["CI - Build & Test"]
+    types:
+      - completed
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: ${{ secrets.AZURE_ACR_LOGIN_SERVER }}
+  BACKEND_IMAGE: studentqna-backend
+  FRONTEND_IMAGE: studentqna-frontend
+  K8S_NAMESPACE: ${{ secrets.K8S_NAMESPACE }}
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy to AKS
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Azure login via service principal
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name ${{ secrets.AZURE_ACR_NAME }}
+
+      # Build + Push backend
+      - name: Build and Push Backend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./users/StudentQnA.Users.Api
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:latest
+
+      # Build + Push frontend
+      - name: Build and Push Frontend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend/studentqna
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
+
+      # Connect AKS
+      - name: Set AKS Context
+        uses: azure/aks-set-context@v4
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          cluster-name: ${{ secrets.AZURE_AKS_NAME }}
+          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
+
+      # Apply Kubernetes manifests
+      - name: Apply Kubernetes Manifests
+        run: |
+          kubectl apply -n $K8S_NAMESPACE -f k8s/
+          kubectl apply -n $K8S_NAMESPACE -f frontend/studentqna/k8s/
+
+      # Update deployments with the new image-tags
+      - name: Update Images in Deployments
+        run: |
+          kubectl set image deployment/backend backend=${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }} -n $K8S_NAMESPACE
+          kubectl set image deployment/frontend frontend=${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }} -n $K8S_NAMESPACE
+
+      - name: Wait for Rollout
+        run: |
+          kubectl rollout status deployment/backend -n $K8S_NAMESPACE --timeout=120s
+          kubectl rollout status deployment/frontend -n $K8S_NAMESPACE --timeout=120s
