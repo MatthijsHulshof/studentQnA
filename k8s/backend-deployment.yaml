@@ -28,7 +28,7 @@ spec:
                   key: ConnectionStrings__DefaultConnection
           resources:
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "256Mi"
+              cpu: "150m"
       imagePullSecrets:
         - name: acr-secret
