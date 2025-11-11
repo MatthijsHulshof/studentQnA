@@ -49,6 +49,8 @@ jobs:
         with:
           context: ./frontend/studentqna
           push: true
+          build-args: |
+            REACT_APP_API_URL=${{ secrets.FRONTEND_API_URL }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:latest
