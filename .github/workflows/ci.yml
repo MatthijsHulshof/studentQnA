@@ -48,9 +48,10 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: .
+          projectBaseDir: users/StudentQnA.Users.Api
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
-            -Dsonar.sources=users/StudentQnA.Users.Api,users/StudentQnA.Users.ApiTests
-            -Dsonar.cs.opencover.reportsPaths=users/StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml
+            -Dsonar.sources=.
+            -Dsonar.cs.opencover.reportsPaths=../StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml
+
