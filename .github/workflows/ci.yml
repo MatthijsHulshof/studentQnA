@@ -60,4 +60,4 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.sources=.
             -Dsonar.cs.vstest.reportsPaths=../StudentQnA.Users.ApiTests/TestResults/*.trx
-            -Dsonar.coverageReportPaths=../StudentQnA.Users.ApiTests/TestResults/coverage.opencover.xml
+            -Dsonar.coverageReportPaths=../StudentQnA.Users.ApiTests/TestResults/*/coverage.opencover.xml
