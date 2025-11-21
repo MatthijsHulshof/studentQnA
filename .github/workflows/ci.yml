@@ -22,31 +22,22 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore dependencies
-        working-directory: users/StudentQnA.Users.ApiTests
-        run: dotnet restore
+        run: dotnet restore users/StudentQnA.Users.ApiTests
 
       - name: Build solution
-        working-directory: users/StudentQnA.Users.ApiTests
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build users/StudentQnA.Users.ApiTests --configuration Release --no-restore
 
       - name: Run unit tests with coverage
-        working-directory: users/StudentQnA.Users.ApiTests
         run: |
-          dotnet test \
+          dotnet test users/StudentQnA.Users.ApiTests \
+            --configuration Release \
             /p:CollectCoverage=true \
             /p:CoverletOutput=TestResults/coverage.opencover.xml \
             /p:CoverletOutputFormat=opencover
 
-      - name: Collect Coverage
-        working-directory: users/StudentQnA.Users.ApiTests
-        run: dotnet test --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-
       - name: Debug coverage files
-        working-directory: users/StudentQnA.Users.ApiTests
         run: |
-          echo "Coverage files found:"
-          find . -name "*.xml"
-          find . -name "*.coverage*"
+          find users/StudentQnA.Users.ApiTests -name "*.xml"
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
@@ -59,5 +50,4 @@ jobs:
             -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
             -Dsonar.sources=users/StudentQnA.Users.Api,users/StudentQnA.Users.ApiTests
             -Dsonar.cs.vstest.reportsPaths=users/StudentQnA.Users.ApiTests/TestResults/**/*.trx
-            -Dsonar.coverageReportPaths=users/StudentQnA.Users.ApiTests/TestResults/*/coverage.opencover.xml
-
+            -Dsonar.coverageReportPaths=users/StudentQnA.Users.ApiTests/TestResults/coverage.opencover.xml
