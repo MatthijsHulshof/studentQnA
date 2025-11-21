@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -37,3 +39,19 @@ jobs:
         with:
           name: backend-test-results
           path: users/StudentQnA.Users.Api/TestResults/**/*.trx
+
+      - name: Collect Code Coverage
+        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=studentqna_backend
+            -Dsonar.organization=${{ secrets.SONAR_ORG }}
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.sources=.
+            -Dsonar.cs.vstest.reportsPaths=**/TestResults/*.trx
+            -Dsonar.coverageReportPaths=**/coverage.cobertura.xml
