@@ -22,14 +22,17 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore users/StudentQnA.Users.ApiTests
+        working-directory: users/StudentQnA.Users.ApiTests
+        run: dotnet restore
 
       - name: Build solution
-        run: dotnet build users/StudentQnA.Users.ApiTests --configuration Release --no-restore
+        working-directory: users/StudentQnA.Users.ApiTests
+        run: dotnet build --configuration Release --no-restore
 
       - name: Run unit tests with coverage
+        working-directory: users/StudentQnA.Users.ApiTests
         run: |
-          dotnet test users/StudentQnA.Users.ApiTests \
+          dotnet test \
             --configuration Release \
             /p:CollectCoverage=true \
             /p:CoverletOutput=TestResults/coverage.opencover.xml \
@@ -37,7 +40,8 @@ jobs:
 
       - name: Debug coverage files
         run: |
-          find users/StudentQnA.Users.ApiTests -name "*.xml"
+          echo "Coverage files found:"
+          find users/StudentQnA.Users.ApiTests -maxdepth 6 -type f -name "coverage.opencover.xml" -o -name "*.trx"
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
@@ -49,5 +53,4 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
             -Dsonar.sources=users/StudentQnA.Users.Api,users/StudentQnA.Users.ApiTests
-            -Dsonar.cs.vstest.reportsPaths=users/StudentQnA.Users.ApiTests/TestResults/**/*.trx
-            -Dsonar.coverageReportPaths=users/StudentQnA.Users.ApiTests/TestResults/coverage.opencover.xml
+            -Dsonar.cs.opencover.reportsPaths=users/StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml
