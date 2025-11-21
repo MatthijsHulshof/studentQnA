@@ -21,13 +21,13 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
-      - name: Restore dependencies
-        working-directory: users/StudentQnA.Users.ApiTests
-        run: dotnet restore
+      - name: Restore solution
+        working-directory: users/StudentQnA.Users.Api
+        run: dotnet restore StudentQnA.Users.Api.sln
 
       - name: Build solution
-        working-directory: users/StudentQnA.Users.ApiTests
-        run: dotnet build --configuration Release --no-restore
+        working-directory: users/StudentQnA.Users.Api
+        run: dotnet build StudentQnA.Users.Api.sln --configuration Release --no-restore
 
       - name: Run unit tests with coverage
         working-directory: users/StudentQnA.Users.ApiTests
@@ -41,7 +41,7 @@ jobs:
       - name: Debug coverage files
         run: |
           echo "Coverage files found:"
-          find users/StudentQnA.Users.ApiTests -maxdepth 6 -type f -name "coverage.opencover.xml" -o -name "*.trx"
+          find users/StudentQnA.Users.ApiTests -name "coverage.opencover.xml"
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
