@@ -53,11 +53,11 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: users/StudentQnA.Users.Api
+          projectBaseDir: .
           args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.sources=.
-            -Dsonar.cs.vstest.reportsPaths=../StudentQnA.Users.ApiTests/TestResults/*.trx
-            -Dsonar.coverageReportPaths=../StudentQnA.Users.ApiTests/TestResults/*/coverage.opencover.xml
+            -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
+            -Dsonar.sources=users/StudentQnA.Users.Api,users/StudentQnA.Users.ApiTests
+            -Dsonar.cs.vstest.reportsPaths=users/StudentQnA.Users.ApiTests/TestResults/**/*.trx
+            -Dsonar.coverageReportPaths=users/StudentQnA.Users.ApiTests/TestResults/*/coverage.opencover.xml
+
