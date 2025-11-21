@@ -47,6 +47,13 @@ jobs:
         working-directory: users/StudentQnA.Users.Api
         run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
+      - name: Debug coverage files
+        working-directory: users/StudentQnA.Users.Api
+        run: |
+          echo "Coverage files found:"
+          find . -name "coverage.cobertura.xml"
+
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
@@ -54,7 +61,7 @@ jobs:
         with:
           projectBaseDir: users/StudentQnA.Users.Api
           args: >
-            -Dsonar.projectKey=MatthijsHulshof_studentQnA
+            -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.sources=.
