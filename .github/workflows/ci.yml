@@ -44,11 +44,12 @@ jobs:
           find users/StudentQnA.Users.ApiTests -name "coverage.opencover.xml"
 
       - name: SonarCloud Scan
+        working-directory: users/StudentQnA.Users.Api
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: users/StudentQnA.Users.Api
+          projectBaseDir: .
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
