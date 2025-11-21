@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "EDK3uQ+Np00=",
+  "dgSpecHash": "4clq8x2ARpg=",
   "success": true,
   "projectFilePath": "C:\\Users\\matth\\Documents\\s7\\studentQnA\\users\\StudentQnA.Users.ApiTests\\StudentQnA.Users.ApiTests.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\matth\\.nuget\\packages\\coverlet.collector\\6.0.4\\coverlet.collector.6.0.4.nupkg.sha512",
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.applicationinsights\\2.22.0\\microsoft.applicationinsights.2.22.0.nupkg.sha512",
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.aspnetcore.antiforgery\\2.3.0\\microsoft.aspnetcore.antiforgery.2.3.0.nupkg.sha512",
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.3.0\\microsoft.aspnetcore.authentication.abstractions.2.3.0.nupkg.sha512",
@@ -50,7 +51,7 @@
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.codeanalysis.common\\2.8.2\\microsoft.codeanalysis.common.2.8.2.nupkg.sha512",
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.codeanalysis.csharp\\2.8.2\\microsoft.codeanalysis.csharp.2.8.2.nupkg.sha512",
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.codeanalysis.razor\\2.3.0\\microsoft.codeanalysis.razor.2.3.0.nupkg.sha512",
-    "C:\\Users\\matth\\.nuget\\packages\\microsoft.codecoverage\\18.0.0\\microsoft.codecoverage.18.0.0.nupkg.sha512",
+    "C:\\Users\\matth\\.nuget\\packages\\microsoft.codecoverage\\18.0.1\\microsoft.codecoverage.18.0.1.nupkg.sha512",
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.dotnet.platformabstractions\\2.1.0\\microsoft.dotnet.platformabstractions.2.1.0.nupkg.sha512",
     "C:\\Users\\matth\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.10\\microsoft.entityframeworkcore.9.0.10.nupkg.sha512",

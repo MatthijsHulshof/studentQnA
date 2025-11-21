@@ -7,7 +7,7 @@
     <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
     <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\matth\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
-    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.14.0</NuGetToolVersion>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.14.1</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\matth\.nuget\packages\" />
@@ -22,7 +22,7 @@
     <Import Project="$(NuGetPackageRoot)microsoft.testing.extensions.telemetry\1.4.3\buildTransitive\net8.0\Microsoft.Testing.Extensions.Telemetry.props" Condition="Exists('$(NuGetPackageRoot)microsoft.testing.extensions.telemetry\1.4.3\buildTransitive\net8.0\Microsoft.Testing.Extensions.Telemetry.props')" />
     <Import Project="$(NuGetPackageRoot)mstest.testadapter\3.6.4\build\net8.0\MSTest.TestAdapter.props" Condition="Exists('$(NuGetPackageRoot)mstest.testadapter\3.6.4\build\net8.0\MSTest.TestAdapter.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.testplatform.testhost\18.0.0\build\net8.0\Microsoft.TestPlatform.TestHost.props" Condition="Exists('$(NuGetPackageRoot)microsoft.testplatform.testhost\18.0.0\build\net8.0\Microsoft.TestPlatform.TestHost.props')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.codecoverage\18.0.0\build\netstandard2.0\Microsoft.CodeCoverage.props" Condition="Exists('$(NuGetPackageRoot)microsoft.codecoverage\18.0.0\build\netstandard2.0\Microsoft.CodeCoverage.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.codecoverage\18.0.1\build\netstandard2.0\Microsoft.CodeCoverage.props" Condition="Exists('$(NuGetPackageRoot)microsoft.codecoverage\18.0.1\build\netstandard2.0\Microsoft.CodeCoverage.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.net.test.sdk\18.0.0\build\net8.0\Microsoft.NET.Test.Sdk.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.test.sdk\18.0.0\build\net8.0\Microsoft.NET.Test.Sdk.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">

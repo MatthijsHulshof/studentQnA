@@ -35,15 +35,14 @@ jobs:
 
       - name: Collect Coverage
         working-directory: users/StudentQnA.Users.ApiTests
-        run: dotnet test --collect:"XPlat Code Coverage"
+        run: dotnet test --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Debug coverage files
         working-directory: users/StudentQnA.Users.ApiTests
         run: |
-          echo "Found coverage files:"
-          find . -name "coverage.cobertura.xml"
-          echo "Found TRX files:"
-          find . -name "*.trx"
+          echo "Coverage files found:"
+          find . -name "*.xml"
+          find . -name "*.coverage*"
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
@@ -57,4 +56,4 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.sources=.
             -Dsonar.cs.vstest.reportsPaths=../StudentQnA.Users.ApiTests/TestResults/**/*.trx
-            -Dsonar.coverageReportPaths=../StudentQnA.Users.ApiTests/TestResults/**/coverage.cobertura.xml
+            -Dsonar.coverageReportPaths=../StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml
