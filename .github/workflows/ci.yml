@@ -54,7 +54,7 @@ jobs:
         with:
           projectBaseDir: users/StudentQnA.Users.Api
           args: >
-            -Dsonar.projectKey=StudentQnA.Users.Api
+            -Dsonar.projectKey=MatthijsHulshof_studentQnA
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.sources=.
