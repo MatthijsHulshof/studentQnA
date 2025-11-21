@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StudentQnA.Users.ApiTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72626ca45c960c46ba2ee115d8f6c01e7ceb14af")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+597c9ef538670ea41b9e6e28269d91d4676f6e67")]
 [assembly: System.Reflection.AssemblyProductAttribute("StudentQnA.Users.ApiTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StudentQnA.Users.ApiTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -6,69 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-# jobs:
-#   backend-tests:
-#     name: Backend Unit Tests
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         working-directory: users/StudentQnA.Users.Api
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-#         with:
-#           fetch-depth: 0
-
-#       - name: Setup .NET
-#         uses: actions/setup-dotnet@v4
-#         with:
-#           dotnet-version: '9.0.x'
-
-#       - name: Restore dependencies
-#         working-directory: users/StudentQnA.Users.ApiTests
-#         run: dotnet restore
-
-#       - name: Build solution
-#         working-directory: users/StudentQnA.Users.Api
-#         run: dotnet build --configuration Release --no-restore
-
-#       - name: Run unit tests
-#         working-directory: users/StudentQnA.Users.Api
-#         run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=test-results.trx"
-
-#       - name: Upload test results
-#         if: always()
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: backend-test-results
-#           path: users/StudentQnA.Users.Api/TestResults/**/*.trx
-
-#       - name: Collect Code Coverage
-#         working-directory: users/StudentQnA.Users.Api
-#         run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
-
-#       - name: Debug coverage files
-#         working-directory: users/StudentQnA.Users.Api
-#         run: |
-#           echo "Coverage files found:"
-#           find . -name "coverage.cobertura.xml"
-
-
-#       - name: SonarCloud Scan
-#         uses: SonarSource/sonarcloud-github-action@v2
-#         env:
-#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#         with:
-#           projectBaseDir: users/StudentQnA.Users.Api
-#           args: >
-#             -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
-#             -Dsonar.organization=${{ secrets.SONAR_ORG }}
-#             -Dsonar.host.url=https://sonarcloud.io
-#             -Dsonar.sources=.
-#             -Dsonar.cs.vstest.reportsPaths=**/TestResults/*.trx
-#             -Dsonar.coverageReportPaths=**/coverage.cobertura.xml
-
-
 jobs:
   backend-tests:
     runs-on: ubuntu-latest
@@ -92,13 +29,13 @@ jobs:
         working-directory: users/StudentQnA.Users.ApiTests
         run: dotnet build --configuration Release --no-restore
 
-      - name: Run unit tests with TRX logging
+      - name: Run unit tests
         working-directory: users/StudentQnA.Users.ApiTests
         run: dotnet test --logger "trx;LogFileName=tests.trx"
 
       - name: Collect Coverage
         working-directory: users/StudentQnA.Users.ApiTests
-        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+        run: dotnet test --collect:"XPlat Code Coverage"
 
       - name: Debug coverage files
         working-directory: users/StudentQnA.Users.ApiTests
