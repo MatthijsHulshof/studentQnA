@@ -38,7 +38,7 @@ jobs:
             /p:CoverletOutput=TestResults/coverage.opencover.xml \
             /p:CoverletOutputFormat=opencover
 
-      - name: Debug coverage files
+      - name: Debug coverage
         run: |
           echo "Coverage files found:"
           find users/StudentQnA.Users.ApiTests -name "coverage.opencover.xml"
