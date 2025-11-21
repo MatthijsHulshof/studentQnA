@@ -25,12 +25,15 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore dependencies
+        working-directory: users/StudentQnA.Users.Api
         run: dotnet restore
 
       - name: Build solution
+        working-directory: users/StudentQnA.Users.Api
         run: dotnet build --configuration Release --no-restore
 
       - name: Run unit tests
+        working-directory: users/StudentQnA.Users.Api
         run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=test-results.trx"
 
       - name: Upload test results
@@ -41,6 +44,7 @@ jobs:
           path: users/StudentQnA.Users.Api/TestResults/**/*.trx
 
       - name: Collect Code Coverage
+        working-directory: users/StudentQnA.Users.Api
         run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
       - name: SonarCloud Scan
@@ -48,6 +52,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
+          projectBaseDir: users/StudentQnA.Users.Api
           args: >
             -Dsonar.projectKey=studentqna_backend
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
