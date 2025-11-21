@@ -53,5 +53,5 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
             -Dsonar.sources=.
+            -Dsonar.tests=../StudentQnA.Users.ApiTests
             -Dsonar.cs.opencover.reportsPaths=../StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml
-
