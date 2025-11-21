@@ -3,35 +3,35 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StudentQnA.Users.Api.Controllers;
 using StudentQnA.Users.Api.Data;
 using StudentQnA.Users.Api.Models;
-using Xunit;
 
 namespace StudentQnA.Users.Api.Tests
 {
+    [TestClass]
     public class NamesControllerTests
     {
-        private readonly AppDbContext _context;
-        private readonly NamesController _controller;
+        private AppDbContext _context;
+        private NamesController _controller;
 
-        public NamesControllerTests()
+        [TestInitialize]
+        public void Setup()
         {
-            // Use an InMemory database
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
 
             _context = new AppDbContext(options);
 
-            // Empty database for every test
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
             _controller = new NamesController(_context);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task GetNames_ReturnsAllNames()
         {
             // Arrange
@@ -45,12 +45,16 @@ namespace StudentQnA.Users.Api.Tests
             var result = await _controller.GetNames();
 
             // Assert
-            var actionResult = Xunit.Assert.IsType<ActionResult<IEnumerable<NameEntity>>>(result);
-            var names = Xunit.Assert.IsAssignableFrom<IEnumerable<NameEntity>>(actionResult.Value);
-            Xunit.Assert.Equal(2, names.Count());
+            var actionResult = result as ActionResult<IEnumerable<NameEntity>>;
+            Assert.IsNotNull(actionResult);
+
+            var names = actionResult.Value;
+            Assert.IsNotNull(names);
+
+            Assert.AreEqual(2, names.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public async Task PostName_AddsNameAndReturnsCreatedAtAction()
         {
             // Arrange
@@ -64,15 +68,20 @@ namespace StudentQnA.Users.Api.Tests
             var result = await _controller.PostName(newName);
 
             // Assert
-            var actionResult = Xunit.Assert.IsType<ActionResult<NameEntity>>(result);
-            var createdResult = Xunit.Assert.IsType<CreatedAtActionResult>(actionResult.Result);
-            var returnValue = Xunit.Assert.IsType<NameEntity>(createdResult.Value);
+            var actionResult = result as ActionResult<NameEntity>;
+            Assert.IsNotNull(actionResult);
 
-            Xunit.Assert.Equal("Linda", returnValue.Value);
-            Xunit.Assert.Equal(1, _context.Names.Count());
+            var createdResult = actionResult.Result as CreatedAtActionResult;
+            Assert.IsNotNull(createdResult);
+
+            var returnValue = createdResult.Value as NameEntity;
+            Assert.IsNotNull(returnValue);
+
+            Assert.AreEqual("Linda", returnValue.Value);
+            Assert.AreEqual(1, _context.Names.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public async Task PostName_SavesToDatabase()
         {
             // Arrange
@@ -87,8 +96,8 @@ namespace StudentQnA.Users.Api.Tests
 
             // Assert
             var saved = await _context.Names.FirstOrDefaultAsync(n => n.Value == "Pieter");
-            Xunit.Assert.NotNull(saved);
-            Xunit.Assert.Equal("Pieter", saved.Value);
+            Assert.IsNotNull(saved);
+            Assert.AreEqual("Pieter", saved.Value);
         }
     }
 }

@@ -80,16 +80,6 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.4, )"
-            },
-            "xunit": {
-              "target": "Package",
-              "version": "[2.9.3, )"
-            },
-            "xunit.runner.visualstudio": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[3.1.5, )"
             }
           },
           "imports": [
