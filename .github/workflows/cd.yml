@@ -77,5 +77,5 @@ jobs:
 
       - name: Wait for Rollout
         run: |
-          kubectl rollout status deployment/backend -n $K8S_NAMESPACE --timeout=120s
+          kubectl rollout status deployment/backend -n $K8S_NAMESPACE --timeout=300s
           kubectl rollout status deployment/frontend -n $K8S_NAMESPACE --timeout=120s
