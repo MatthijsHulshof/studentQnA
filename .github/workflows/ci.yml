@@ -47,13 +47,13 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: users/StudentQnA.Users.Api
-          args: >
-            -Dsonar.organization=${{ secrets.SONAR_ORG }}
-            -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
-            -Dsonar.sources=.
-            -Dsonar.inclusions=**/*.cs
-            -Dsonar.language=cs
-            -Dsonar.tests=../StudentQnA.Users.ApiTests
-            -Dsonar.cs.opencover.reportsPaths=../StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml
+        # with:
+        #   projectBaseDir: users/StudentQnA.Users.Api
+        #   args: >
+        #     -Dsonar.organization=${{ secrets.SONAR_ORG }}
+        #     -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
+        #     -Dsonar.sources=.
+        #     -Dsonar.inclusions=**/*.cs
+        #     -Dsonar.language=cs
+        #     -Dsonar.tests=../StudentQnA.Users.ApiTests
+        #     -Dsonar.cs.opencover.reportsPaths=../StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml
