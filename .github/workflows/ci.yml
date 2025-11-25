@@ -21,42 +21,41 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
+      - name: Install dotnet-sonarscanner
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      - name: SonarCloud Begin
+        run: |
+          dotnet-sonarscanner begin \
+            /k:"MatthijsHulshof_studentQnA" \
+            /o:"matthijshulshof" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.cs.opencover.reportsPaths="users/StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml"
+
       - name: Restore solution
-        working-directory: users/StudentQnA.Users.Api
-        run: dotnet restore StudentQnA.Users.Api.sln
+        run: dotnet restore users/StudentQnA.Users.Api/StudentQnA.Users.Api.sln
 
       - name: Build solution
-        working-directory: users/StudentQnA.Users.Api
-        run: dotnet build StudentQnA.Users.Api.sln --configuration Release --no-restore
+        run: dotnet build users/StudentQnA.Users.Api/StudentQnA.Users.Api.sln --configuration Release --no-restore
 
       - name: Run unit tests with coverage
-        working-directory: users/StudentQnA.Users.ApiTests
         run: |
-          dotnet test \
+          dotnet test users/StudentQnA.Users.ApiTests \
             --configuration Release \
             /p:CollectCoverage=true \
             /p:CoverletOutput=TestResults/coverage.opencover.xml \
             /p:CoverletOutputFormat=opencover
 
-      - name: Debug coverage
+      - name: Debug coverage files
         run: |
           echo "Coverage files found:"
-          find users/StudentQnA.Users.ApiTests -name "coverage.opencover.xml"
+          find users/StudentQnA.Users.ApiTests -name "coverage.opencover.xml" -o -name "*.trx"
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: .
-
-        # with:
-        #   projectBaseDir: users/StudentQnA.Users.Api
-        #   args: >
-        #     -Dsonar.organization=${{ secrets.SONAR_ORG }}
-        #     -Dsonar.projectKey=${{ secrets.SONAR_KEY }}
-        #     -Dsonar.sources=.
-        #     -Dsonar.inclusions=**/*.cs
-        #     -Dsonar.language=cs
-        #     -Dsonar.tests=../StudentQnA.Users.ApiTests
-        #     -Dsonar.cs.opencover.reportsPaths=../StudentQnA.Users.ApiTests/TestResults/**/coverage.opencover.xml
+      - name: SonarCloud End
+        if: always()
+        run: |
+          dotnet-sonarscanner end \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
