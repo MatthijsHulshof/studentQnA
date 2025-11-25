@@ -48,7 +48,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: users/StudentQnA.Users.Api
+          projectBaseDir: .
 
         # with:
         #   projectBaseDir: users/StudentQnA.Users.Api
