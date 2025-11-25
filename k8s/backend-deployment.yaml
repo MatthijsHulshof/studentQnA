@@ -13,6 +13,7 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: backend-sa
       containers:
         - name: backend
           image: studentqnaacr9355.azurecr.io/studentqna-backend:latest

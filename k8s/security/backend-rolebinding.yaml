@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-secret-reader-binding
+  namespace: studentqna
+subjects:
+- kind: ServiceAccount
+  name: backend-sa
+  namespace: studentqna
+roleRef:
+  kind: Role
+  name: backend-secret-reader
+  apiGroup: rbac.authorization.k8s.io
