@@ -47,6 +47,9 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: users/StudentQnA.Users.Api
+
         # with:
         #   projectBaseDir: users/StudentQnA.Users.Api
         #   args: >
