@@ -16,8 +16,7 @@ spec:
       serviceAccountName: backend-sa
       containers:
         - name: backend
-          image: studentqnaacr9355.azurecr.io/studentqna-backend:changename
-          imagePullPolicy: Always
+          image: studentqnaacr9355.azurecr.io/studentqna-backend:latest
           ports:
             - containerPort: 8080
           env:
