@@ -30,3 +30,9 @@ export default function () {
 
   sleep(1);
 }
+
+export function handleSummary(data) {
+  console.log("=== TEST SUMMARY ===");
+  console.log(JSON.stringify(data, null, 2));
+  return {};
+}
