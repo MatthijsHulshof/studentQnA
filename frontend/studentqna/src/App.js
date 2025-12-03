@@ -12,7 +12,7 @@ const API_URL = `${process.env.REACT_APP_API_URL}/api/names`;
       .then((res) => res.json())
       .then((data) => setNames(data))
       .catch((err) => console.error("Error fetching names:", err));
-  }, []);
+  }, [API_URL]);
 
   // Nieuw naam posten
   const handleSubmit = async (e) => {
