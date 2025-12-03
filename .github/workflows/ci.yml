@@ -48,6 +48,27 @@ jobs:
             /p:CollectCoverage=true \
             /p:CoverletOutput=TestResults/coverage.opencover.xml \
             /p:CoverletOutputFormat=opencover
+      #Frontend Cypress tests
+      - name: Setup Node for Cypress
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install frontend dependencies
+        working-directory: frontend/studentqna
+        run: npm install
+
+      - name: Start frontend app
+        working-directory: frontend/studentqna
+        run: npm run dev &
+      
+      - name: Wait for frontend to start
+        run: npx wait-on http://localhost:3000
+
+      - name: Run Cypress tests
+        working-directory: frontend/studentqna
+        run: npx cypress run
+
 
       - name: Debug coverage files
         run: |
