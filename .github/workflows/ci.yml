@@ -102,7 +102,7 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Setup k6
-        uses: grafana/setup-k6-action@v12.3
+        uses: grafana/setup-k6-action@v0.49.0
 
       - name: Start API locally
         run: |
