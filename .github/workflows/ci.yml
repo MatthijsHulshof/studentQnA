@@ -109,6 +109,9 @@ jobs:
           dotnet run --project users/StudentQnA.Users.Api --urls "http://0.0.0.0:5263" > api.log 2>&1 &
           sleep 10
 
+      - name: Wait for backend
+        run: npx wait-on http://localhost:5263/swagger
+
       - name: Run k6 stress test
         env:
           API_URL: http://localhost:5263
