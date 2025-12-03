@@ -88,29 +88,48 @@ jobs:
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
 
-  stress-test:
-    runs-on: ubuntu-latest
-    needs: backend-tests
+stress-test:
+  runs-on: ubuntu-latest
+  needs: backend-tests
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
 
-      - name: Setup k6
-        uses: grafana/setup-k6-action@v1
+    - name: Setup k6
+      uses: grafana/setup-k6-action@v1
 
-      - name: Start API locally
-        run: |
-          dotnet run --project users/StudentQnA.Users.Api --urls "http://0.0.0.0:5263" > api.log 2>&1 &
-          sleep 10
+    - name: Start API locally
+      run: |
+        ASPNETCORE_URLS="http://0.0.0.0:5263" \
+        dotnet run --project users/StudentQnA.Users.Api > api.log 2>&1 &
+        sleep 20
 
+    - name: Check API logs
+      run: |
+        echo "=== API LOG START ==="
+        cat api.log || true
+        echo "=== API LOG END ==="
 
-      - name: Run k6 stress test
-        env:
-          API_URL: http://localhost:5263
-        run: k6 run tests/k6/stress-test.js
+    - name: Verify API is responding
+      run: |
+        for i in {1..10}; do
+          if curl -s http://localhost:5263/api/Names > /dev/null; then
+            echo "API is up!"
+            exit 0
+          fi
+          echo "Waiting for API..."
+          sleep 2
+        done
+        echo "API did not start!"
+        exit 1
+
+    - name: Run k6 stress test
+      env:
+        API_URL: http://localhost:5263
+      run: k6 run tests/k6/stress-test.js
