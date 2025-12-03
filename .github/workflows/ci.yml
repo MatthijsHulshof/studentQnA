@@ -129,6 +129,11 @@ jobs:
           echo "API did not start!"
           exit 1
 
+      - name: Test endpoint manually
+        run: |
+          echo "Curl result:"
+          curl -v http://localhost:5263/api/Names
+
       - name: Run k6 stress test
         env:
           API_URL: http://localhost:5263
