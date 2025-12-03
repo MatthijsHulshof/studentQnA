@@ -58,13 +58,15 @@ jobs:
         working-directory: frontend/studentqna
         run: npm install
 
-      - name: Start frontend app
+      - name: Run Cypress tests
         working-directory: frontend/studentqna
         run: |
           HOST=0.0.0.0 PORT=3000 npm start &
 
-      - name: Wait for frontend to start
-        run: npx wait-on@7 http://localhost:3000
+          npx wait-on@7 http://localhost:3000
+
+          npx cypress run
+
 
       - name: Run Cypress tests
         working-directory: frontend/studentqna
