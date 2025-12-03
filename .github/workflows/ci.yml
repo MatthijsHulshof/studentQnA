@@ -60,7 +60,8 @@ jobs:
 
       - name: Start frontend app
         working-directory: frontend/studentqna
-        run: npm start &
+        run: |
+          HOST=0.0.0.0 PORT=3000 npm start &
 
       - name: Wait for frontend to start
         run: npx wait-on@7 http://localhost:3000
