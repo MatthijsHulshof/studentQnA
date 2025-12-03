@@ -104,19 +104,17 @@ jobs:
       - name: Setup k6
         uses: grafana/setup-k6-action@v1
 
-      - name: Start API locally
+      - name: Start API locally (CI mode)
+        env:
+          CI: true
         run: |
-          ASPNETCORE_URLS="http://0.0.0.0:5263" \
-          dotnet run --project users/StudentQnA.Users.Api > api.log 2>&1 &
-          sleep 20
+          dotnet run --project users/StudentQnA.Users.Api --urls "http://0.0.0.0:5263" > api.log 2>&1 &
+          sleep 8
 
-      - name: Check API logs
-        run: |
-          echo "=== API LOG START ==="
-          cat api.log || true
-          echo "=== API LOG END ==="
+      - name: Show API log
+        run: cat api.log || true
 
-      - name: Verify API is responding
+      - name: Verify API is running
         run: |
           for i in {1..10}; do
             if curl -s http://localhost:5263/api/Names > /dev/null; then
@@ -126,13 +124,8 @@ jobs:
             echo "Waiting for API..."
             sleep 2
           done
-          echo "API did not start!"
+          echo "API did NOT start"
           exit 1
-
-      - name: Test endpoint manually
-        run: |
-          echo "Curl result:"
-          curl -v http://localhost:5263/api/Names
 
       - name: Run k6 stress test
         env:

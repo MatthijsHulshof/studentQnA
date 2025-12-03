@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var isCi = builder.Configuration.GetValue<bool>("CI");
+
 //Docker secrets
 //var dbUser = File.ReadAllText("/run/secrets/postgres_user").Trim();
 //var dbPassword = File.ReadAllText("/run/secrets/postgres_password").Trim();
@@ -14,9 +16,23 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
 
-// Register DbContext
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// === Register DbContext ===
+if (isCi)
+{
+    // Use InMemory DB during CI (GitHub Actions)
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseInMemoryDatabase("ci-db"));
+
+    Console.WriteLine("Running in CI mode, Using InMemory DB");
+}
+else
+{
+    // Normal PostgreSQL usage
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    Console.WriteLine("Using PostgreSQL");
+}
 
 // Add services to the container.
 
