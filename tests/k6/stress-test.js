@@ -16,7 +16,7 @@ export let options = {
 export default function () {
   const baseUrl = __ENV.API_URL;
 
-  const res = http.get(`${baseUrl}/api/users`);
+  const res = http.get(`${baseUrl}/api/Names`);
 
   check(res, {
     'status is 200': (r) => r.status === 200,
