@@ -13,6 +13,8 @@ export let options = {
     http_req_failed: ['rate<0.05'],
     http_req_duration: ['p(95)<800'],
   },
+  setupTimeout: '5m',
+  summaryTrendStats: ['avg','p(90)','p(95)','max','min'],
 };
 
 export default function () {
@@ -31,8 +33,4 @@ export default function () {
   sleep(1);
 }
 
-export function handleSummary(data) {
-  console.log("=== TEST SUMMARY ===");
-  console.log(JSON.stringify(data, null, 2));
-  return {};
-}
+
