@@ -9,6 +9,8 @@ on:
 jobs:
   backend-tests:
     runs-on: ubuntu-latest
+    env:
+      ASPNETCORE_ENVIRONMENT: CI
 
     steps:
       - name: Checkout code
@@ -91,6 +93,8 @@ jobs:
   stress-test:
     runs-on: ubuntu-latest
     needs: backend-tests
+    env:
+      ASPNETCORE_ENVIRONMENT: CI
 
     steps:
       - name: Checkout code

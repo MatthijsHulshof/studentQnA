@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
 using StudentQnA.Users.Api.Data;
 using System.IO;
 using Microsoft.Extensions.Configuration;
