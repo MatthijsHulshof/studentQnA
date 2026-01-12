@@ -133,5 +133,5 @@ jobs:
 
       - name: Run k6 stress test
         env:
-          API_URL: http://localhost:5263
+          API_URL: http://4.251.185.103
         run: k6 run tests/k6/stress-test.js
