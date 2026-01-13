@@ -4,6 +4,7 @@ using StudentQnA.Users.Api.Data;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using StudentQnA.Users.Api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,8 @@ else
 
     Console.WriteLine("Using PostgreSQL");
 }
+
+builder.Services.AddScoped<INameService, NameService>();
 
 // Add services to the container.
 
