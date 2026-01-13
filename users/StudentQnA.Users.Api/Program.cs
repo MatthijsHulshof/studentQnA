@@ -5,6 +5,7 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using StudentQnA.Users.Api.Service;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,9 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseHttpMetrics();
+app.MapMetrics("/metrics");
 
 app.MapHealthChecks("/health");
 
