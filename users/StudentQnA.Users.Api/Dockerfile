@@ -23,8 +23,11 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r app && useradd -r -g app app \
-    && chown -R app:app /app
+RUN set -eux; \
+    if ! getent group app >/dev/null; then groupadd -r app -g 10001; fi; \
+    if ! id -u app >/dev/null 2>&1; then useradd -r -g app -u 10001 app; fi; \
+    chown -R app:app /app
+
 
 COPY --from=build /app/out ./
 
