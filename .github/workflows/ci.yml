@@ -90,6 +90,73 @@ jobs:
             /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
 
+  security-scan:
+      runs-on: ubuntu-latest
+      needs: backend-tests
+      permissions:
+        contents: read
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        # 1) Config scans: Dockerfiles + docker-compose
+        - name: Trivy config scan - API Dockerfile
+          uses: aquasecurity/trivy-action@0.24.0
+          with:
+            scan-type: config
+            scan-ref: users/StudentQnA.Users.Api/Dockerfile
+            severity: HIGH,CRITICAL
+            exit-code: "1"
+            ignore-unfixed: true
+
+        - name: Trivy config scan - Frontend Dockerfile
+          uses: aquasecurity/trivy-action@0.24.0
+          with:
+            scan-type: config
+            scan-ref: frontend/studentqna/Dockerfile
+            severity: HIGH,CRITICAL
+            exit-code: "1"
+            ignore-unfixed: true
+
+        - name: Trivy config scan - docker-compose.yml
+          uses: aquasecurity/trivy-action@0.24.0
+          with:
+            scan-type: config
+            scan-ref: docker-compose.yml
+            severity: HIGH,CRITICAL
+            exit-code: "1"
+            ignore-unfixed: true
+
+        # 2) Build images (voor echte CVE image scan)
+        - name: Build API image
+          run: docker build -t studentqna-api:${{ github.sha }} users/StudentQnA.Users.Api
+
+        - name: Build Frontend image
+          run: docker build -t studentqna-frontend:${{ github.sha }} frontend/studentqna
+
+        # 3) Image scans: OS + library CVEs in de images
+        - name: Trivy image scan - API image
+          uses: aquasecurity/trivy-action@0.24.0
+          with:
+            scan-type: image
+            image-ref: studentqna-api:${{ github.sha }}
+            vuln-type: os,library
+            severity: HIGH,CRITICAL
+            exit-code: "1"
+            ignore-unfixed: true
+
+        - name: Trivy image scan - Frontend image
+          uses: aquasecurity/trivy-action@0.24.0
+          with:
+            scan-type: image
+            image-ref: studentqna-frontend:${{ github.sha }}
+            vuln-type: os,library
+            severity: HIGH,CRITICAL
+            exit-code: "1"
+            ignore-unfixed: true
+
+
   stress-test:
     runs-on: ubuntu-latest
     needs: backend-tests
