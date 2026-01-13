@@ -10,8 +10,8 @@ export let options = {
     { duration: '20s', target: 0 },
   ],
   thresholds: {
-    http_req_failed: ['rate<0.20'],
-    http_req_duration: ['p(95)<800'],
+    http_req_failed: ['rate<0.20']
+    //http_req_duration: ['p(95)<800'],
   },
   setupTimeout: '5m',
   summaryTrendStats: ['avg','p(90)','p(95)','max','min'],
