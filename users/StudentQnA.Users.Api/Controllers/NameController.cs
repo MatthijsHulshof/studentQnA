@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StudentQnA.Users.Api.Data;
 using StudentQnA.Users.Api.Models;
+using StudentQnA.Users.Api.Service;
 
 namespace StudentQnA.Users.Api.Controllers
 {
@@ -9,28 +8,29 @@ namespace StudentQnA.Users.Api.Controllers
     [Route("api/[controller]")]
     public class NamesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly INameService _service;
 
-        public NamesController(AppDbContext context)
+        public NamesController(INameService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/names
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<NameEntity>>> GetNames()
+        public async Task<ActionResult<IEnumerable<NameEntity>>> GetNames(CancellationToken ct)
         {
-            return await _context.Names.ToListAsync();
+            var names = await _service.GetAllAsync(ct);
+
+            return Ok(names);
         }
 
         // POST: api/names
         [HttpPost]
-        public async Task<ActionResult<NameEntity>> PostName(NameEntity name)
+        public async Task<ActionResult<NameEntity>> PostName([FromBody] NameEntity name, CancellationToken ct)
         {
-            _context.Names.Add(name);
-            await _context.SaveChangesAsync();
+            var created = await _service.CreateAsync(name, ct);
 
-            return CreatedAtAction(nameof(GetNames), new { id = name.Id }, name);
+            return CreatedAtAction(nameof(GetNames), new { id = created.Id }, created);
         }
     }
 }

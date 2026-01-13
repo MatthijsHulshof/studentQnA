@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StudentQnA.Users.Api.Controllers;
 using StudentQnA.Users.Api.Data;
 using StudentQnA.Users.Api.Models;
+using StudentQnA.Users.Api.Service;
 
 namespace StudentQnA.Users.Api.Tests
 {
@@ -14,21 +17,21 @@ namespace StudentQnA.Users.Api.Tests
     public class NamesControllerTests
     {
         private AppDbContext _context;
+        private INameService _service;
         private NamesController _controller;
 
         [TestInitialize]
         public void Setup()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             _context = new AppDbContext(options);
-
-            _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
-            _controller = new NamesController(_context);
+            _service = new NameService(_context);
+            _controller = new NamesController(_service);
         }
 
         [TestMethod]
@@ -42,13 +45,13 @@ namespace StudentQnA.Users.Api.Tests
             await _context.SaveChangesAsync();
 
             // Act
-            var result = await _controller.GetNames();
+            var result = await _controller.GetNames(CancellationToken.None);
 
             // Assert
-            var actionResult = result as ActionResult<IEnumerable<NameEntity>>;
-            Assert.IsNotNull(actionResult);
+            var ok = result.Result as OkObjectResult;
+            Assert.IsNotNull(ok);
 
-            var names = actionResult.Value;
+            var names = ok.Value as IEnumerable<NameEntity>;
             Assert.IsNotNull(names);
 
             Assert.AreEqual(2, names.Count());
@@ -65,20 +68,19 @@ namespace StudentQnA.Users.Api.Tests
             };
 
             // Act
-            var result = await _controller.PostName(newName);
+            var result = await _controller.PostName(newName, CancellationToken.None);
 
             // Assert
-            var actionResult = result as ActionResult<NameEntity>;
-            Assert.IsNotNull(actionResult);
+            var createdAt = result.Result as CreatedAtActionResult;
+            Assert.IsNotNull(createdAt);
 
-            var createdResult = actionResult.Result as CreatedAtActionResult;
-            Assert.IsNotNull(createdResult);
+            Assert.AreEqual(nameof(NamesController.GetNames), createdAt.ActionName);
 
-            var returnValue = createdResult.Value as NameEntity;
+            var returnValue = createdAt.Value as NameEntity;
             Assert.IsNotNull(returnValue);
-
             Assert.AreEqual("Linda", returnValue.Value);
-            Assert.AreEqual(1, _context.Names.Count());
+
+            Assert.AreEqual(1, await _context.Names.CountAsync());
         }
 
         [TestMethod]
@@ -92,7 +94,7 @@ namespace StudentQnA.Users.Api.Tests
             };
 
             // Act
-            await _controller.PostName(entity);
+            await _controller.PostName(entity, CancellationToken.None);
 
             // Assert
             var saved = await _context.Names.FirstOrDefaultAsync(n => n.Value == "Pieter");
