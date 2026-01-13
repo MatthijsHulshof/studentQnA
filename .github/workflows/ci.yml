@@ -40,6 +40,9 @@ jobs:
       - name: Restore solution
         run: dotnet restore users/StudentQnA.Users.Api/StudentQnA.Users.Api.sln
 
+      - name: Verify backend dependencies
+        run: dotnet list users/StudentQnA.Users.Api/StudentQnA.Users.Api.sln package --vulnerable --include-transitive
+
       - name: Build solution
         run: dotnet build users/StudentQnA.Users.Api/StudentQnA.Users.Api.sln --configuration Release --no-restore
 
@@ -60,6 +63,10 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend/studentqna
         run: npm install
+
+      - name: Verify frontend dependencies
+        working-directory: frontend/studentqna
+        run: npm audit --audit-level=high
 
       - name: Build frontend
         working-directory: frontend/studentqna
