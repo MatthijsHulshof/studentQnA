@@ -33,7 +33,7 @@ else
     // Normal PostgreSQL usage
     builder.Services.AddDbContextPool<AppDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")),
-        poolSize: 25
+        poolSize: 10
         );
 
     Console.WriteLine("Using PostgreSQL");
